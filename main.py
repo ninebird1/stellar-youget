@@ -38,6 +38,9 @@ class IqiyiPlugin(StellarPlayer.IStellarPlayerPlugin):
             try:
                 youget.url = url
                 youget.prepare()
+            except:
+                pass
+            finally:
                 if youget.streams:
                     urls = []
                     print(youget.streams)
@@ -51,11 +54,9 @@ class IqiyiPlugin(StellarPlayer.IStellarPlayerPlugin):
                     self.player.updateControlValue('main','list',urls)
                     self.playurl = urls
                     self.player.toast('main','解析完成')
-                    return True
-            except:
-                pass
-            self.player.toast('main','没有解析到播放地址')
-        return False
+                else:
+                    self.player.toast('main','没有解析到播放地址')
+
             
     def onPlayClick(self, page, control, idx, *arg):
         self.player.play(self.playurl[idx]['url'])
