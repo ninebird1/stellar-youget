@@ -1,0 +1,4 @@
+name=在线网站视频解析
+description=解析爱奇艺、优酷、Bilibili页面，获取视频播放地址
+url=https://github.com/ninebird1/stellar-youget
+version=1
