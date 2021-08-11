@@ -8,6 +8,7 @@ class IqiyiPlugin(StellarPlayer.IStellarPlayerPlugin):
     def __init__(self, player: StellarPlayer.IStellarPlayer):
         super().__init__(player)
         self.playurl = []
+        self.url = ''
 
     def show(self):
         list_layout = [[{'type':'label','name':'video_profile'},{'type':'link','name':'播放','width':60,'@click':'onPlayClick'}]]
@@ -29,6 +30,7 @@ class IqiyiPlugin(StellarPlayer.IStellarPlayerPlugin):
     def parse_html(self,*args):
         url = self.player.getControlValue('main','url_edit')
         if url:
+            self.url = url
             if re.match(r'(.*)iqiyi.com',url):
                 youget = iqiyi.Iqiyi()
             elif re.match(r'(.*)youku.com',url):
@@ -59,7 +61,11 @@ class IqiyiPlugin(StellarPlayer.IStellarPlayerPlugin):
 
             
     def onPlayClick(self, page, control, idx, *arg):
-        self.player.play(self.playurl[idx]['url'])
+        if re.match(r'(.*)bilibili.com',self.url):
+            ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36'
+            self.player.play(self.playurl[idx]['url'],headers={'referer':self.url,'user_agent':ua})
+        else:
+            self.player.play(self.playurl[idx]['url'])
 
 
 def newPlugin(player:StellarPlayer.IStellarPlayer,*arg):
