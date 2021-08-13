@@ -30,6 +30,11 @@ class IqiyiPlugin(StellarPlayer.IStellarPlayerPlugin):
     def parse_html(self,*args):
         url = self.player.getControlValue('main','url_edit')
         if url:
+            if self.url == url:
+                return
+            self.player.updateControlValue('main','list',[])
+            if hasattr(self.player, 'loadingAnimation'):
+                self.player.loadingAnimation('main')
             self.url = url
             if re.match(r'(.*)iqiyi.com',url):
                 youget = iqiyi.Iqiyi()
@@ -43,6 +48,8 @@ class IqiyiPlugin(StellarPlayer.IStellarPlayerPlugin):
             except:
                 pass
             finally:
+                if hasattr(self.player, 'loadingAnimation'):
+                    self.player.loadingAnimation('main',stop=True)
                 if youget.streams:
                     urls = []
                     print(youget.streams)
